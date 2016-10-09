@@ -3,7 +3,7 @@ package ru.vektory79.kspeedup.stack
 import gnu.trove.list.array.TIntArrayList
 import gnu.trove.map.hash.TIntObjectHashMap
 import gnu.trove.stack.array.TIntArrayStack
-import ru.vektory79.kspeedup.async.SpinReadWriteLock
+import ru.vektory79.kspeedup.async.ReadWriteSpinLock
 import ru.vektory79.kspeedup.collections.AsyncStack
 import ru.vektory79.kspeedup.collections.*
 import java.io.Closeable
@@ -320,8 +320,8 @@ class StackManager private constructor() {
             }
     }
 
-    private val valueSegmentLock = SpinReadWriteLock()
-    private val collectionSegmentLock = SpinReadWriteLock()
+    private val valueSegmentLock = ReadWriteSpinLock()
+    private val collectionSegmentLock = ReadWriteSpinLock()
 
     private val valueSegmentsVault = WeakHashMap<Class<*>, AsyncStack<StackSegment<*>>>()
     private val arraySegmentsVault = WeakHashMap<Class<*>, TIntObjectHashMap<AsyncStack<StackSegment<*>>>>()

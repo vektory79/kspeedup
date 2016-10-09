@@ -1,7 +1,7 @@
 package ru.vektory79.kspeedup.collections
 
 import gnu.trove.map.hash.TIntObjectHashMap
-import ru.vektory79.kspeedup.async.SpinReadWriteLock
+import ru.vektory79.kspeedup.async.ReadWriteSpinLock
 import java.util.Deque
 import java.util.Map
 import java.util.concurrent.locks.ReentrantReadWriteLock
@@ -60,7 +60,7 @@ inline fun <V> TIntObjectHashMap<V>.getOrPut(key: Int, lock: ReentrantReadWriteL
     }
 }
 
-inline fun <V> TIntObjectHashMap<V>.getOrPut(key: Int, writeLock: SpinReadWriteLock.WriteLock, crossinline defaultValue: () -> V): V {
+inline fun <V> TIntObjectHashMap<V>.getOrPut(key: Int, writeLock: ReadWriteSpinLock.WriteLock, crossinline defaultValue: () -> V): V {
     var value = this[key]
     if (value == null) {
         value = writeLock {
@@ -97,7 +97,7 @@ inline fun <K, V> MutableMap<K, V>.getOrPut(key: K, defaultValue: () -> V): V {
     }
 }
 
-inline fun <K, V> MutableMap<K, V>.getOrPut(key: K, writeLock: SpinReadWriteLock.WriteLock, crossinline defaultValue: () -> V): V {
+inline fun <K, V> MutableMap<K, V>.getOrPut(key: K, writeLock: ReadWriteSpinLock.WriteLock, crossinline defaultValue: () -> V): V {
     var value = this[key]
     if (value == null) {
         value = writeLock {

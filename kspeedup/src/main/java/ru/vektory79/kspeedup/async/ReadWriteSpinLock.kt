@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.locks.AbstractQueuedSynchronizer
 
-class SpinReadWriteLock() {
+class ReadWriteSpinLock() {
     companion object {
         val shortCircuit = ShortCircuit()
     }
@@ -100,7 +100,7 @@ class SpinReadWriteLock() {
         }
     }
 
-    class WriteLock(val lock: SpinReadWriteLock) {
+    class WriteLock(val lock: ReadWriteSpinLock) {
 
         fun <T> writeLock(writeOperation: () -> T): T {
             return invoke(writeOperation)

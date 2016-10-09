@@ -1,10 +1,10 @@
 package ru.vektory79.kspeedup.collections
 
-import ru.vektory79.kspeedup.async.SpinReadWriteLock
+import ru.vektory79.kspeedup.async.ReadWriteSpinLock
 import java.util.concurrent.atomic.AtomicInteger
 
 internal class AsyncStackBuffer<T : Any>(val initialCapacity: Int = 16, val capacityIncrement: Int = initialCapacity) {
-    private val spinLock = SpinReadWriteLock()
+    private val spinLock = ReadWriteSpinLock()
 
     @Suppress("CAST_NEVER_SUCCEEDS")
     private var buffer = arrayOfNulls<Any>(initialCapacity) as Array<T>
@@ -53,7 +53,7 @@ internal class AsyncStackBuffer<T : Any>(val initialCapacity: Int = 16, val capa
 }
 
 class AsyncStack<T : Any>(val initialCapacity: Int = 16, val capacityIncrement: Int = initialCapacity) {
-    private val spinLock = SpinReadWriteLock()
+    private val spinLock = ReadWriteSpinLock()
 
     private var up = AsyncStackBuffer<T>(initialCapacity, capacityIncrement)
     private var down = AsyncStackBuffer<T>(initialCapacity, capacityIncrement)
