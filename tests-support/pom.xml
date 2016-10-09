@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>tests-support</artifactId>
+
+    <parent>
+        <groupId>ru.vektory79</groupId>
+        <artifactId>kspeedup-root</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <!-- OSGi Arquillian -->
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-container-felix-embedded</artifactId>
+            <version>${arquillian.osgi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <version>${arquillian.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.osgi</groupId>
+            <artifactId>shrinkwrap-osgi</artifactId>
+            <version>${shrinkwrap.osgi.version}</version>
+        </dependency>
+    </dependencies>
+</project>
