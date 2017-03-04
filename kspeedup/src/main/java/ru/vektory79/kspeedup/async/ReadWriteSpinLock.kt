@@ -4,47 +4,59 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.locks.AbstractQueuedSynchronizer
 
-class ReadWriteSpinLock() {
+class ReadWriteSpinLock {
     companion object {
         val shortCircuit = ShortCircuit()
     }
     private val _outerGate = AtomicBoolean(true)
     private val _enterCounter = AtomicInteger(0)
     private val _innerGate = AtomicBoolean(true)
-    val readWait = ReadWait()
-    val writeWait = WriteWait()
-    val writeLock = WriteLock(this)
+    @PublishedApi
+    internal val readWait = ReadWait()
+    @PublishedApi
+    internal val writeWait = WriteWait()
+    @PublishedApi
+    internal val writeLock = WriteLock(this)
 
-    val outerGate: Boolean
+    @PublishedApi
+    internal val outerGate: Boolean
         get() = _outerGate.get()
 
-    fun outerGateTryClose(): Boolean {
+    @PublishedApi
+    internal fun outerGateTryClose(): Boolean {
         return _outerGate.compareAndSet(true, false)
     }
 
-    fun outerGateOpen() {
+    @PublishedApi
+    internal fun outerGateOpen() {
         _outerGate.set(true)
     }
 
-    val innerGate: Boolean
+    @PublishedApi
+    internal val innerGate: Boolean
         get() = _innerGate.get()
 
-    fun innerGateTryClose(): Boolean {
+    @PublishedApi
+    internal fun innerGateTryClose(): Boolean {
         return _innerGate.compareAndSet(true, false)
     }
 
-    fun innerGateOpen() {
+    @PublishedApi
+    internal fun innerGateOpen() {
         _innerGate.set(true)
     }
 
-    val threadsEntered: Int
+    @PublishedApi
+    internal val threadsEntered: Int
         get() = _enterCounter.get()
 
-    fun enter() {
+    @PublishedApi
+    internal fun enter() {
         _enterCounter.andIncrement
     }
 
-    fun leave() {
+    @PublishedApi
+    internal fun leave() {
         _enterCounter.andDecrement
     }
 

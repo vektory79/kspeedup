@@ -3,46 +3,53 @@ package ru.vektory79.kspeedup.async
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.locks.AbstractQueuedSynchronizer
-import java.util.function.BiFunction
-import java.util.function.Function
-import java.util.function.Supplier
 
 /**
  * Created by vektor on 13.01.16.
  */
 class ReentrantReadWriteSpinLock {
     private val outerGate = AtomicBoolean(true)
-    private val enterCounter = AtomicInteger(0)
+    @PublishedApi
+    internal val enterCounter = AtomicInteger(0)
     private val innerGate = AtomicBoolean(true)
-    private val lockContext = ThreadLocal.withInitial { LockContext() }
-    private val readWait = ReadWait()
-    private val writeWait = WriteWait()
+    @PublishedApi
+    internal val lockContext = ThreadLocal.withInitial { LockContext() }
+    @PublishedApi
+    internal val readWait = ReadWait()
+    @PublishedApi
+    internal val writeWait = WriteWait()
 
-    private fun getOuterGate(): Boolean {
+    @PublishedApi
+    internal fun getOuterGate(): Boolean {
         return outerGate.get()
     }
 
-    private fun outerGateTryClose(): Boolean {
+    @PublishedApi
+    internal fun outerGateTryClose(): Boolean {
         return outerGate.compareAndSet(true, false)
     }
 
-    private fun outerGateOpen() {
+    @PublishedApi
+    internal fun outerGateOpen() {
         outerGate.set(true)
     }
 
-    private fun getInnerGate(): Boolean {
+    @PublishedApi
+    internal fun getInnerGate(): Boolean {
         return innerGate.get()
     }
 
-    private fun innerGateTryClose(): Boolean {
+    @PublishedApi
+    internal fun innerGateTryClose(): Boolean {
         return innerGate.compareAndSet(true, false)
     }
 
-    private fun innerGateOpen() {
+    @PublishedApi
+    internal fun innerGateOpen() {
         innerGate.set(true)
     }
 
-    fun <T> readLock(readOperation: () -> T): T {
+    inline fun <T> readLock(readOperation: () -> T): T {
         val context = lockContext.get()
         while (true) {
             if (context.readLocks == 0 && context.writeLocks == 0) {
@@ -65,7 +72,7 @@ class ReentrantReadWriteSpinLock {
         }
     }
 
-    fun <T> writeLock(writeOperation: () -> T): T {
+    inline fun <T> writeLock(writeOperation: () -> T): T {
         val context = lockContext.get()
         while (true) {
             if (context.writeLocks == 0 && !getOuterGate()) {
@@ -123,6 +130,7 @@ class ReentrantReadWriteSpinLock {
         }
     }
 
+    @PublishedApi
     internal inner class ReadWait : AbstractQueuedSynchronizer() {
         override fun tryAcquire(arg: Int): Boolean {
             return getOuterGate()
@@ -153,6 +161,7 @@ class ReentrantReadWriteSpinLock {
         }
     }
 
+    @PublishedApi
     internal inner class WriteWait : AbstractQueuedSynchronizer() {
         override fun tryAcquire(arg: Int): Boolean {
             val context = lockContext.get()
@@ -184,12 +193,16 @@ class ReentrantReadWriteSpinLock {
         }
     }
 
-    private class LockContext {
+    @PublishedApi
+    internal class LockContext {
+        @PublishedApi
         internal var readLocks = 0
+        @PublishedApi
         internal var writeLocks = 0
     }
 
     companion object {
-        private val shortCircuit = ShortCircuit()
+        @PublishedApi
+        internal val shortCircuit = ShortCircuit()
     }
 }
