@@ -1,7 +1,8 @@
-package ru.vektory79.kspeedup.async
+package ru.vektory79.test.kspeedup.async
 
 import com.googlecode.junittoolbox.MultithreadingTester
 import org.junit.Test
+import ru.vektory79.kspeedup.async.ReentrantReadWriteSpinLock
 import ru.vektory79.kspeedup.async.utils.RandomString
 
 import java.util.HashMap

@@ -28,7 +28,7 @@
         <illegaltransitivereportonly>true</illegaltransitivereportonly>
 
         <!-- Libs versions -->
-        <kotlin.version>1.1.0</kotlin.version>
+        <kotlin.version>1.1.1</kotlin.version>
         <lwjgl.version>3.0.0</lwjgl.version>
 
         <arquillian.version>1.1.2.Final</arquillian.version>
@@ -126,6 +126,7 @@
                                 <goal>compile</goal>
                             </goals>
                             <configuration>
+                                <jvmTarget>1.8</jvmTarget>
                                 <sourceDirs>
                                     <source>${basedir}/src/main/java</source>
                                 </sourceDirs>
@@ -138,6 +139,7 @@
                                 <goal>test-compile</goal>
                             </goals>
                             <configuration>
+                                <jvmTarget>1.8</jvmTarget>
                                 <sourceDirs>
                                     <source>${basedir}/src/test/java</source>
                                 </sourceDirs>
@@ -166,17 +168,6 @@
                             </configuration>
                         </execution>
                     </executions>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.8</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.apache.ant</groupId>
-                            <artifactId>ant-apache-regexp</artifactId>
-                            <version>1.8.2</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
 
                 <plugin>

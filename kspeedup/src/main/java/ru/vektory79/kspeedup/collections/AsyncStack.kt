@@ -19,9 +19,9 @@ internal class AsyncStackBuffer<T : Any>(val initialCapacity: Int = 16, val capa
     fun fill(value: T) {
         val h = head.incrementAndGet()
 
-        spinLock<Unit>{ writeLock ->
+        spinLock { writeLock ->
             if (h >= buffer.size) {
-                writeLock<Unit>{
+                writeLock {
                     var b = buffer
                     var inc = capacityIncrement
                     while (h >= b.size + inc) {
@@ -64,7 +64,7 @@ class AsyncStack<T : Any>(val initialCapacity: Int = 16, val capacityIncrement: 
     }
 
     fun push(value: T) {
-        spinLock<Unit> {
+        spinLock {
             down.fill(value)
         }
     }

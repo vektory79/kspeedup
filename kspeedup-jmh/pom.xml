@@ -75,9 +75,9 @@ THE POSSIBILITY OF SUCH DAMAGE.
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jmh.version>1.14.1</jmh.version>
+        <jmh.version>1.17.5</jmh.version>
         <jmh.generator>default</jmh.generator>  <!-- or "asm", or "reflection" -->
-        <javac.target>1.6</javac.target>
+        <javac.target>1.8</javac.target>
         <uberjar.name>benchmarks</uberjar.name>
     </properties>
 
@@ -88,8 +88,9 @@ THE POSSIBILITY OF SUCH DAMAGE.
             -->
 
             <plugin>
-                <artifactId>kotlin-maven-plugin</artifactId>
                 <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
                 <executions>
                     <execution>
                         <id>process-sources</id>
@@ -98,6 +99,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
                             <goal>compile</goal>
                         </goals>
                         <configuration>
+                            <jvmTarget>1.8</jvmTarget>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
                             </sourceDirs>

@@ -138,7 +138,8 @@ class ReadWriteSpinLock {
         }
     }
 
-    inner class ReadWait : AbstractQueuedSynchronizer() {
+    @PublishedApi
+    internal inner class ReadWait : AbstractQueuedSynchronizer() {
 
         override fun tryAcquire(arg: Int): Boolean {
             return outerGate
@@ -159,7 +160,8 @@ class ReadWriteSpinLock {
         }
     }
 
-    inner class WriteWait : AbstractQueuedSynchronizer() {
+    @PublishedApi
+    internal inner class WriteWait : AbstractQueuedSynchronizer() {
 
         override fun tryAcquire(arg: Int): Boolean {
             return threadsEntered <= 1

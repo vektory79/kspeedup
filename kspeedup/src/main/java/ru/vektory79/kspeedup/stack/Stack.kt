@@ -5,7 +5,7 @@ import gnu.trove.map.hash.TIntObjectHashMap
 import gnu.trove.stack.array.TIntArrayStack
 import ru.vektory79.kspeedup.async.ReadWriteSpinLock
 import ru.vektory79.kspeedup.collections.AsyncStack
-import ru.vektory79.kspeedup.collections.*
+import ru.vektory79.kspeedup.collections.getOrPut
 import java.io.Closeable
 import java.util.*
 
@@ -20,10 +20,8 @@ interface CollectionFactoryAcceptor<T : Any> {
 inline fun stack(body: (ctrFactory: StackConstructorFactory) -> Unit) {
     val manager = StackManager.manager
     val ctrFactory = manager.open()
-    try {
+    ctrFactory.use { ctrFactory ->
         body(ctrFactory)
-    } finally {
-        ctrFactory.close()
     }
 }
 
@@ -34,18 +32,20 @@ class StackSegment<E : Any> {
     val type: Class<E>
     private val data: Array<E>
 
+    @Suppress("UNCHECKED_CAST")
     constructor(capacity: Int, type: Class<E>, factory: () -> E) {
         this.type = type
         isCollection = false
         size = 0
-        data = Array<Any>(capacity) { i -> factory() } as Array<E>
+        data = Array<Any>(capacity) { factory() } as Array<E>
     }
 
+    @Suppress("UNCHECKED_CAST")
     constructor(capacity: Int, type: Class<E>, size: Int, factory: (Int) -> E) {
         this.type = type
         isCollection = true
         this.size = size
-        data = Array<Any>(capacity) { i -> factory(size) } as Array<E>
+        data = Array<Any>(capacity) { factory(size) } as Array<E>
     }
 
     fun alloc(): E? {
@@ -58,7 +58,7 @@ class StackSegment<E : Any> {
                 cursor -= count
                 return 0
             } else {
-                val result = count - cursor;
+                val result = count - cursor
                 cursor = 0
                 return result
             }
@@ -107,6 +107,7 @@ class StackConstructorFactory internal constructor(private val manager: StackMan
         level--
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun <T : Any> getConstructor(clazz: Class<T>, ctr: () -> T): StackSingleConstructor<T> {
         val result = singleConstructors.getOrPut(clazz) {
             StackSingleConstructor(manager, clazz, ctr)
@@ -119,6 +120,7 @@ class StackConstructorFactory internal constructor(private val manager: StackMan
         return getConstructor(T::class.java, ctr)
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun <T : Any> getConstructor(clazz: Class<T>, size: Int, ctr: (size: Int) -> T): StackCollectionConstructor<T> {
         val result = collectionConstructors.getOrPut(clazz) {
             TIntObjectHashMap(StackManager.DEFAULT_CAPACITY)
@@ -198,6 +200,7 @@ class StackSingleConstructor<T : Any> internal constructor(
         }
         levelCounters[level] += 1
         if (value is SingleFactoryAcceptor<*>) {
+            @Suppress("UNCHECKED_CAST")
             val v = value as SingleFactoryAcceptor<T>
             v.setFactory(this)
         }
@@ -275,6 +278,7 @@ class StackCollectionConstructor<T : Any> internal constructor(
         }
         levelCounters[level] += 1
         if (value is CollectionFactoryAcceptor<*>) {
+            @Suppress("UNCHECKED_CAST")
             val v = value as CollectionFactoryAcceptor<T>
             v.setFactory(this)
         }
@@ -293,6 +297,7 @@ class StackCollectionConstructor<T : Any> internal constructor(
         value.init()
         levelCounters[level] += 1
         if (value is CollectionFactoryAcceptor<*>) {
+            @Suppress("UNCHECKED_CAST")
             val v = value as CollectionFactoryAcceptor<T>
             v.setFactory(this)
         }
@@ -343,6 +348,7 @@ class StackManager private constructor() {
             val segmentVault = valueSegmentsVault.getOrPut(clazz, writeLock) {
                 AsyncStack<StackSegment<*>>()
             }
+            @Suppress("UNCHECKED_CAST")
             segmentVault.pop() as StackSegment<E>? ?: StackSegment(StackManager.DEFAULT_CAPACITY*32, clazz, factory)
         }
     }
@@ -356,18 +362,20 @@ class StackManager private constructor() {
                 AsyncStack<StackSegment<*>>()
             }
             val segment = segmentVault.pop() ?: StackSegment(StackManager.DEFAULT_CAPACITY*32, clazz, size, factory)
+            @Suppress("UNCHECKED_CAST")
             segment as StackSegment<E>
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     internal fun <E : Any> retractSegment(segment: StackSegment<E>) {
         if (!segment.isCollection) {
-            val seg: AsyncStack<StackSegment<E>> = valueSegmentLock {
+            val seg = valueSegmentLock {
                 valueSegmentsVault[segment.type] as AsyncStack<StackSegment<E>>
             }
             seg.push(segment)
         } else {
-            val seg: TIntObjectHashMap<AsyncStack<StackSegment<E>>> = collectionSegmentLock {
+            val seg = collectionSegmentLock {
                 arraySegmentsVault[segment.type] as TIntObjectHashMap<AsyncStack<StackSegment<E>>>
             }
             seg.get(segment.size).push(segment)
