@@ -10,7 +10,6 @@
 	<packaging>pom</packaging>
     
 	<modules>
-        <module>trove</module>
         <module>tests-support</module>
         <module>kspeedup</module>
 		<module>kspeedup-jmh</module>
@@ -38,6 +37,27 @@
         <junit.version>4.12</junit.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-vektory79-osgi-bundles</id>
+            <name>bintray</name>
+            <url>http://dl.bintray.com/vektory79/osgi-bundles</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-vektory79-osgi-bundles</id>
+            <name>bintray-plugins</name>
+            <url>http://dl.bintray.com/vektory79/osgi-bundles</url>
+        </pluginRepository>
+    </pluginRepositories>
+    
     <dependencies>
         <!-- OSGi API -->
         <dependency>
@@ -103,9 +123,21 @@
                 <version>${kotlin.version}</version>
             </dependency>
             <dependency>
-                <groupId>net.sf.trove4j</groupId>
-                <artifactId>trove4j</artifactId>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-osgi-bundle</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-test</artifactId>
+                <version>${kotlin.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>ru.vektory79</groupId>
+                <artifactId>trove</artifactId>
                 <version>3.0.3</version>
+                <scope>compile</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

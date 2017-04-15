@@ -2,15 +2,5 @@
 .classpath
 .settings/
 target/
-bin/
-components-file/bin/
-core/bin/
-.checkstyle
 .idea
 *.iml
-*.ipr
-*.iws
-.xml
-.DS_Store
-.idea
-.fbExcludeFilterFile
