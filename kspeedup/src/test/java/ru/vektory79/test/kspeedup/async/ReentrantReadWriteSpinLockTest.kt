@@ -24,7 +24,7 @@ class ReentrantReadWriteSpinLockTest {
     }
 
     private val lock = ReentrantReadWriteSpinLock()
-    private val stringGenerator = RandomString(2)
+    private val stringGenerator = RandomString(2, 1234)
     private val graph = HashMap<String, Ref>()
 
     @Test

@@ -5,9 +5,9 @@ import java.util.Random
 /**
  * Created by vektor on 09.02.16.
  */
-class RandomString(private val length: Int) {
+class RandomString(private val length: Int, randomSeed: Long) {
 
-    private val random = Random(123)
+    private val random = Random(randomSeed)
 
     fun nextString(): String {
         if (length < 1)

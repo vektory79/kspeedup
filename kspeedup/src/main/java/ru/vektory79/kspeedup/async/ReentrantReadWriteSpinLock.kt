@@ -82,8 +82,7 @@ class ReentrantReadWriteSpinLock {
                     throw shortCircuit
                 }
             }
-            var innerEntered = false
-            var outerEntered = false
+            var gateMask = 0
             try {
                 if (context.writeLocks == 0) {
                     if (!innerGateTryClose()) {
@@ -93,7 +92,7 @@ class ReentrantReadWriteSpinLock {
                             throw shortCircuit
                         }
                     }
-                    innerEntered = true
+                    gateMask = INNER_GATE_MASK
                     if (!outerGateTryClose()) {
                         if (context.readLocks == 0) {
                             continue
@@ -101,7 +100,7 @@ class ReentrantReadWriteSpinLock {
                             throw shortCircuit
                         }
                     }
-                    outerEntered = true
+                    gateMask = gateMask or OUTER_GATE_MASK
                     context.writeLocks++
                     enterCounter.andIncrement
                     writeWait.lock()
@@ -113,7 +112,7 @@ class ReentrantReadWriteSpinLock {
                     throw shortCircuit
                 }
             } finally {
-                if (outerEntered) {
+                if (gateMask and OUTER_GATE_MASK > 0) {
                     context.writeLocks--
                     enterCounter.andDecrement
 
@@ -121,7 +120,7 @@ class ReentrantReadWriteSpinLock {
                         outerGateOpen()
                     }
                 }
-                if (innerEntered && context.writeLocks == 0) {
+                if ((gateMask and INNER_GATE_MASK > 0) && context.writeLocks == 0) {
                     innerGateOpen()
                 }
                 writeWait.release()
@@ -204,5 +203,9 @@ class ReentrantReadWriteSpinLock {
     companion object {
         @PublishedApi
         internal val shortCircuit = ShortCircuit()
+        @PublishedApi
+        internal const val INNER_GATE_MASK = 0b01
+        @PublishedApi
+        internal const val OUTER_GATE_MASK = 0b10
     }
 }
