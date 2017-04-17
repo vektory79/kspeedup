@@ -9,65 +9,52 @@ import java.util.concurrent.locks.AbstractQueuedSynchronizer
  */
 class ReentrantReadWriteSpinLock {
     private val outerGate = AtomicBoolean(true)
-    @PublishedApi
-    internal val enterCounter = AtomicInteger(0)
+    private val enterCounter = AtomicInteger(0)
     private val innerGate = AtomicBoolean(true)
     @PublishedApi
     internal val lockContext = ThreadLocal.withInitial { LockContext() }
     @PublishedApi
-    internal val readWait = ReadWait()
+    internal val readSync = ReadSync()
     @PublishedApi
-    internal val writeWait = WriteWait()
+    internal val writeSync = WriteSync()
 
-    @PublishedApi
-    internal fun getOuterGate(): Boolean {
+    private fun getOuterGate(): Boolean {
         return outerGate.get()
     }
 
-    @PublishedApi
-    internal fun outerGateTryClose(): Boolean {
+    private fun outerGateTryClose(): Boolean {
         return outerGate.compareAndSet(true, false)
     }
 
-    @PublishedApi
-    internal fun outerGateOpen() {
+    private fun outerGateOpen() {
         outerGate.set(true)
     }
 
-    @PublishedApi
-    internal fun getInnerGate(): Boolean {
+    private fun getInnerGate(): Boolean {
         return innerGate.get()
     }
 
-    @PublishedApi
-    internal fun innerGateTryClose(): Boolean {
+    private fun innerGateTryClose(): Boolean {
         return innerGate.compareAndSet(true, false)
     }
 
-    @PublishedApi
-    internal fun innerGateOpen() {
+    private fun innerGateOpen() {
         innerGate.set(true)
     }
 
     inline fun <T> readLock(readOperation: () -> T): T {
         val context = lockContext.get()
         while (true) {
-            if (context.readLocks == 0 && context.writeLocks == 0) {
-                readWait.lock()
-            }
-            enterCounter.andIncrement
-            context.readLocks++
+            readSync.lockForRead(context)
             try {
-                if (context.readLocks == 1 && context.writeLocks == 0 && !getInnerGate()) continue
+                if (readSync.testInnerGate(context)) continue
                 return readOperation()
             } catch (e: ShortCircuit) {
                 if (context.readLocks > 1) {
                     throw shortCircuit
                 }
             } finally {
-                context.readLocks--
-                enterCounter.andDecrement
-                writeWait.release()
+                readSync.unlockForRead(context)
             }
         }
     }
@@ -75,62 +62,27 @@ class ReentrantReadWriteSpinLock {
     inline fun <T> writeLock(writeOperation: () -> T): T {
         val context = lockContext.get()
         while (true) {
-            if (context.writeLocks == 0 && !getOuterGate()) {
-                if (context.readLocks == 0) {
-                    readWait.lock()
-                } else {
-                    throw shortCircuit
-                }
-            }
+            readSync.lockForWrite(context)
             var gateMask = 0
             try {
-                if (context.writeLocks == 0) {
-                    if (!innerGateTryClose()) {
-                        if (context.readLocks == 0) {
-                            continue
-                        } else {
-                            throw shortCircuit
-                        }
-                    }
-                    gateMask = INNER_GATE_MASK
-                    if (!outerGateTryClose()) {
-                        if (context.readLocks == 0) {
-                            continue
-                        } else {
-                            throw shortCircuit
-                        }
-                    }
-                    gateMask = gateMask or OUTER_GATE_MASK
-                    context.writeLocks++
-                    enterCounter.andIncrement
-                    writeWait.lock()
+                gateMask = writeSync.lock(context)
+                if (gateMask and CAS_MASK > 0) {
+                    continue
                 }
-
                 return writeOperation()
             } catch (e: ShortCircuit) {
                 if (context.readLocks > 0) {
                     throw shortCircuit
                 }
             } finally {
-                if (gateMask and OUTER_GATE_MASK > 0) {
-                    context.writeLocks--
-                    enterCounter.andDecrement
-
-                    if (context.writeLocks == 0) {
-                        outerGateOpen()
-                    }
-                }
-                if ((gateMask and INNER_GATE_MASK > 0) && context.writeLocks == 0) {
-                    innerGateOpen()
-                }
-                writeWait.release()
-                readWait.release()
+                writeSync.unlock(context, gateMask)
+                readSync.unlockForWrite()
             }
         }
     }
 
     @PublishedApi
-    internal inner class ReadWait : AbstractQueuedSynchronizer() {
+    internal inner class ReadSync internal constructor() : AbstractQueuedSynchronizer() {
         override fun tryAcquire(arg: Int): Boolean {
             return getOuterGate()
         }
@@ -139,10 +91,44 @@ class ReentrantReadWriteSpinLock {
             return true
         }
 
-        fun lock() {
-            val context = lockContext.get()
+        @PublishedApi
+        internal fun lockForRead(context: LockContext) {
+            if (context.readLocks == 0 && context.writeLocks == 0) {
+                park(context)
+            }
+            enterCounter.andIncrement
+            context.readLocks++
+        }
+
+        @PublishedApi
+        internal fun lockForWrite(context: LockContext) {
+            if (context.writeLocks == 0 && !getOuterGate()) {
+                if (context.readLocks == 0) {
+                    park(context)
+                } else {
+                    throw shortCircuit
+                }
+            }
+        }
+
+        @PublishedApi
+        internal fun testInnerGate(context: LockContext) = context.readLocks == 1 && context.writeLocks == 0 && !getInnerGate()
+
+        @PublishedApi
+        internal fun unlockForRead(context: LockContext) {
+            context.readLocks--
+            enterCounter.andDecrement
+            writeSync.release()
+        }
+
+        @PublishedApi
+        internal fun unlockForWrite() {
+            release()
+        }
+
+        private fun park(context: LockContext) {
             if (enterCounter.get() <= context.readLocks + context.writeLocks) {
-                writeWait.release()
+                writeSync.release()
             }
             try {
                 acquireInterruptibly(0)
@@ -153,7 +139,7 @@ class ReentrantReadWriteSpinLock {
             }
         }
 
-        fun release() {
+        private fun release() {
             if (getOuterGate()) {
                 release(0)
             }
@@ -161,7 +147,7 @@ class ReentrantReadWriteSpinLock {
     }
 
     @PublishedApi
-    internal inner class WriteWait : AbstractQueuedSynchronizer() {
+    internal inner class WriteSync internal constructor() : AbstractQueuedSynchronizer() {
         override fun tryAcquire(arg: Int): Boolean {
             val context = lockContext.get()
             return enterCounter.get() <= context.readLocks + context.writeLocks
@@ -171,8 +157,50 @@ class ReentrantReadWriteSpinLock {
             return true
         }
 
-        fun lock() {
-            val context = lockContext.get()
+        @PublishedApi
+        internal fun lock(context: LockContext): Int {
+            var gateMask = 0
+            if (context.writeLocks == 0) {
+                if (!innerGateTryClose()) {
+                    if (context.readLocks == 0) {
+                        return CAS_MASK
+                    } else {
+                        throw shortCircuit
+                    }
+                }
+                gateMask = INNER_GATE_MASK
+                if (!outerGateTryClose()) {
+                    if (context.readLocks == 0) {
+                        return gateMask or CAS_MASK
+                    } else {
+                        throw shortCircuit
+                    }
+                }
+                gateMask = gateMask or OUTER_GATE_MASK
+                context.writeLocks++
+                enterCounter.andIncrement
+                park(context)
+            }
+            return gateMask
+        }
+
+        @PublishedApi
+        internal fun unlock(context: LockContext, gateMask: Int) {
+            if (gateMask and OUTER_GATE_MASK > 0) {
+                context.writeLocks--
+                enterCounter.andDecrement
+
+                if (context.writeLocks == 0) {
+                    outerGateOpen()
+                }
+            }
+            if ((gateMask and INNER_GATE_MASK > 0) && context.writeLocks == 0) {
+                innerGateOpen()
+            }
+            release()
+        }
+
+        private fun park(context: LockContext) {
             try {
                 while (enterCounter.get() > context.readLocks + context.writeLocks) {
                     acquireInterruptibly(0)
@@ -186,8 +214,7 @@ class ReentrantReadWriteSpinLock {
             }
         }
 
-
-        fun release() {
+        internal fun release() {
             release(0)
         }
     }
@@ -203,9 +230,9 @@ class ReentrantReadWriteSpinLock {
     companion object {
         @PublishedApi
         internal val shortCircuit = ShortCircuit()
+        private const val INNER_GATE_MASK = 0b010
+        private const val OUTER_GATE_MASK = 0b100
         @PublishedApi
-        internal const val INNER_GATE_MASK = 0b01
-        @PublishedApi
-        internal const val OUTER_GATE_MASK = 0b10
+        internal const val CAS_MASK = 0b001
     }
 }
