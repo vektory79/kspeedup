@@ -45,7 +45,7 @@ internal class AsyncStackBuffer<T : Any>(val initialCapacity: Int = 16, val capa
             }
             var result: T? = null
             if (h >= 0) {
-                result = buffer[h] as T?
+                result = buffer[h]
             }
             result
         }
@@ -59,8 +59,8 @@ class AsyncStack<T : Any>(val initialCapacity: Int = 16, val capacityIncrement: 
     private var down = AsyncStackBuffer<T>(initialCapacity, capacityIncrement)
 
     fun clear() {
-        up = AsyncStackBuffer<T>(initialCapacity, capacityIncrement)
-        down = AsyncStackBuffer<T>(initialCapacity, capacityIncrement)
+        up = AsyncStackBuffer(initialCapacity, capacityIncrement)
+        down = AsyncStackBuffer(initialCapacity, capacityIncrement)
     }
 
     fun push(value: T) {

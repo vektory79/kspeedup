@@ -76,10 +76,10 @@ class StackConstructorFactory internal constructor(private val manager: StackMan
     private val levelCollectionStack = ArrayList<ArrayList<StackCollectionConstructor<*>>>(StackManager.DEFAULT_CAPACITY)
 
     init {
-        for (i in 0..StackManager.DEFAULT_CAPACITY - 1) {
+        for (i in 0 until StackManager.DEFAULT_CAPACITY) {
             levelSingleStack.add(ArrayList(StackManager.DEFAULT_CAPACITY))
         }
-        for (i in 0..StackManager.DEFAULT_CAPACITY - 1) {
+        for (i in 0 until StackManager.DEFAULT_CAPACITY) {
             levelCollectionStack.add(ArrayList(StackManager.DEFAULT_CAPACITY))
         }
     }
@@ -96,11 +96,11 @@ class StackConstructorFactory internal constructor(private val manager: StackMan
     }
 
     override fun close() {
-        for (i in 0..levelSingleStack[level].size - 1) {
+        for (i in 0 until levelSingleStack[level].size) {
             levelSingleStack[level][i].close()
         }
         levelSingleStack[level].clear()
-        for (i in 0..levelCollectionStack[level].size - 1) {
+        for (i in 0 until levelCollectionStack[level].size) {
             levelCollectionStack[level][i].close()
         }
         levelCollectionStack[level].clear()
@@ -346,7 +346,7 @@ class StackManager private constructor() {
     internal fun <E : Any> getSegment(clazz: Class<E>, factory: () -> E): StackSegment<E> {
         return valueSegmentLock { writeLock ->
             val segmentVault = valueSegmentsVault.getOrPut(clazz, writeLock) {
-                AsyncStack<StackSegment<*>>()
+                AsyncStack()
             }
             @Suppress("UNCHECKED_CAST")
             segmentVault.pop() as StackSegment<E>? ?: StackSegment(StackManager.DEFAULT_CAPACITY*32, clazz, factory)
@@ -356,10 +356,10 @@ class StackManager private constructor() {
     internal fun <E : Any> getSegment(clazz: Class<E>, size: Int, factory: (Int) -> E): StackSegment<E> {
         return collectionSegmentLock { writeLock ->
             val arrayVault = arraySegmentsVault.getOrPut(clazz, writeLock) {
-                TIntObjectHashMap<AsyncStack<StackSegment<*>>>()
+                TIntObjectHashMap()
             }
             val segmentVault = arrayVault.getOrPut(size, writeLock) {
-                AsyncStack<StackSegment<*>>()
+                AsyncStack()
             }
             val segment = segmentVault.pop() ?: StackSegment(StackManager.DEFAULT_CAPACITY*32, clazz, size, factory)
             @Suppress("UNCHECKED_CAST")
@@ -401,7 +401,7 @@ fun main(args: Array<String>) {
 
 internal fun sequentialStack(size: Int, result: Vector3D) {
     stack { ctrFactory ->
-        val vectorCtr = ctrFactory<Vector3D> { Vector3D() }
+        val vectorCtr = ctrFactory { Vector3D() }
         for (i in 0..size) {
             result += vectorCtr { set(size.toDouble(), size.toDouble(), size.toDouble()) }
         }
@@ -424,7 +424,7 @@ internal data class Vector3D(var x: Double = 0.0, var y: Double = 0.0, var z: Do
 }
 
 internal operator fun Array<Vector3D>.plusAssign(b: Vector3D) {
-    for (i in 0..size - 1) {
+    for (i in 0 until size) {
         this[i] += b
     }
 }
@@ -432,14 +432,14 @@ internal operator fun Array<Vector3D>.plusAssign(b: Vector3D) {
 internal fun recursionStack(r: Int) {
     if (r > 0) {
         stack { ctrFactory ->
-            val newVector3D = ctrFactory<Vector3D>{ Vector3D() }
+            val newVector3D = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(r.toDouble(), r.toDouble(), r.toDouble())
 
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32){ Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32){ Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array.plusAssign(single)

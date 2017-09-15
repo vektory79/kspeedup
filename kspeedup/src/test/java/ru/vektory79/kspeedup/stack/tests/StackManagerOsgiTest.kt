@@ -41,8 +41,8 @@ class StackManagerOsgiTest {
     fun t01simpleTest() {
         StackManager.manager.clear()
         stack { ctrFactory ->
-            val newVector3D = ctrFactory<Vector3D> { Vector3D() }
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newVector3D = ctrFactory { Vector3D() }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
 
             val single = newVector3D {
                 set(1.0, 1.0, 1.0)
@@ -66,7 +66,7 @@ class StackManagerOsgiTest {
     private fun recursiveSingleValueTest(r: Int) {
         if (r > 0) {
             stack { ctrFactory ->
-                val newVector3D = ctrFactory<Vector3D> { Vector3D() }
+                val newVector3D = ctrFactory { Vector3D() }
                 val single = newVector3D {
                     set(r.toDouble(), r.toDouble(), r.toDouble())
                 }
@@ -86,12 +86,12 @@ class StackManagerOsgiTest {
     private fun recursiveSingleArrayTest(r: Int) {
         if (r > 0) {
             stack { ctrFactory ->
-                val newVector3D = ctrFactory<Vector3D> { Vector3D() }
+                val newVector3D = ctrFactory { Vector3D() }
                 val single = newVector3D {
                     set(r.toDouble(), r.toDouble(), r.toDouble())
                 }
 
-                val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+                val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
                 val array = newArrayVector3D {
                     forEachIndexed { i, vector ->
                         vector.set(i.toDouble(), i.toDouble(), i.toDouble())
@@ -162,7 +162,7 @@ class StackManagerOsgiTest {
         }
 
         stack { ctrFactory ->
-            val vectorCtr = ctrFactory<Vector3D> { Vector3D() }
+            val vectorCtr = ctrFactory { Vector3D() }
             for (i in 0..r) {
                 result += vectorCtr { set(i.toDouble(), i.toDouble(), i.toDouble()) }
             }
@@ -189,7 +189,7 @@ class StackManagerOsgiTest {
         }
 
         stack { ctrFactory ->
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             for (i in 0..r) {
                 val array = newArrayVector3D {
                     forEach { vector ->

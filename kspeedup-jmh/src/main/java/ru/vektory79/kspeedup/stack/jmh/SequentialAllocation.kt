@@ -27,7 +27,7 @@ open class SequentialAllocation {
     @Benchmark
     fun sequentialStack(bh: Blackhole) {
         stack { ctrFactory ->
-            val vectorCtr = ctrFactory<Vector3D> { Vector3D() }
+            val vectorCtr = ctrFactory { Vector3D() }
             bh.consume(vectorCtr)
             for (i in 0..allocationSize) {
                 bh.consume(vectorCtr { set(0.0, 0.0, 0.0) })

@@ -45,13 +45,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(1)
     fun inclusionStack01(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(1.toDouble(), 1.toDouble(), 1.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -64,13 +64,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(2)
     fun inclusionStack02(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(2.toDouble(), 2.toDouble(), 2.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -84,13 +84,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(3)
     fun inclusionStack03(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(3.toDouble(), 3.toDouble(), 3.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -104,13 +104,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(4)
     fun inclusionStack04(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(4.toDouble(), 4.toDouble(), 4.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -124,13 +124,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(5)
     fun inclusionStack05(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(5.toDouble(), 5.toDouble(), 5.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -144,13 +144,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(6)
     fun inclusionStack06(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(6.toDouble(), 6.toDouble(), 6.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -164,13 +164,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(7)
     fun inclusionStack07(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(7.toDouble(), 7.toDouble(), 7.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -184,13 +184,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(8)
     fun inclusionStack08(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(8.toDouble(), 8.toDouble(), 8.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -204,13 +204,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(9)
     fun inclusionStack09(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(9.toDouble(), 9.toDouble(), 9.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -224,13 +224,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(10)
     fun inclusionStack10(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(10.toDouble(), 10.toDouble(), 10.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -244,13 +244,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(11)
     fun inclusionStack11(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(11.toDouble(), 11.toDouble(), 11.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -264,13 +264,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(12)
     fun inclusionStack12(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -284,13 +284,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(13)
     fun inclusionStack13(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -304,13 +304,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(14)
     fun inclusionStack14(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -324,13 +324,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(15)
     fun inclusionStack15(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -344,13 +344,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(16)
     fun inclusionStack16(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -364,13 +364,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(17)
     fun inclusionStack17(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -384,13 +384,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(18)
     fun inclusionStack18(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -404,13 +404,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(19)
     fun inclusionStack19(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -424,13 +424,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(20)
     fun inclusionStack20(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -444,13 +444,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(21)
     fun inclusionStack21(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -464,13 +464,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(22)
     fun inclusionStack22(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -484,13 +484,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(23)
     fun inclusionStack23(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -504,13 +504,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(24)
     fun inclusionStack24(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -524,13 +524,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(25)
     fun inclusionStack25(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -544,13 +544,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(26)
     fun inclusionStack26(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -564,13 +564,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(27)
     fun inclusionStack27(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -584,13 +584,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(28)
     fun inclusionStack28(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -604,13 +604,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(29)
     fun inclusionStack29(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -624,13 +624,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(30)
     fun inclusionStack30(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -644,13 +644,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(31)
     fun inclusionStack31(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single
@@ -664,13 +664,13 @@ open class MyBenchmark {
     @OperationsPerInvocation(32)
     fun inclusionStack32(bh: Blackhole) {
         stack { ctrFactory ->
-            val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+            val newVector3D  = ctrFactory { Vector3D() }
             val single = newVector3D()
             single.set(12.toDouble(), 12.toDouble(), 12.toDouble())
 
-            val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+            val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
             val array = newArrayVector3D()
-            for (i in 0..array.size - 1) {
+            for (i in 0 until array.size) {
                 array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
             }
             array += single

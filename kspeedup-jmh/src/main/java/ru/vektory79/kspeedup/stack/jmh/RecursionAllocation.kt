@@ -29,13 +29,13 @@ open class RecursionAllocation {
     private fun recursionStack(bh: Blackhole, r: Int) {
         if (r > 0) {
             stack { ctrFactory ->
-                val newVector3D  = ctrFactory<Vector3D> { Vector3D() }
+                val newVector3D  = ctrFactory { Vector3D() }
                 val single = newVector3D()
                 single.set(r.toDouble(), r.toDouble(), r.toDouble())
 
-                val newArrayVector3D = ctrFactory<Array<Vector3D>>(32) { Array(it) { Vector3D() } }
+                val newArrayVector3D = ctrFactory(32) { Array(it) { Vector3D() } }
                 val array = newArrayVector3D()
-                for (i in 0..array.size - 1) {
+                for (i in 0 until array.size) {
                     array[i].set(i.toDouble(), i.toDouble(), i.toDouble())
                 }
                 array += single
