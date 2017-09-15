@@ -27,7 +27,7 @@
         <illegaltransitivereportonly>true</illegaltransitivereportonly>
 
         <!-- Libs versions -->
-        <kotlin.version>1.1.1</kotlin.version>
+        <kotlin.version>1.1.4</kotlin.version>
         <lwjgl.version>3.0.0</lwjgl.version>
 
         <arquillian.version>1.1.2.Final</arquillian.version>
