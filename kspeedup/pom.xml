@@ -1,19 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <artifactId>kspeedup</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>ru.vektory79</groupId>
         <artifactId>kspeedup-root</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
-
-    <properties>
-        <lombok.version>1.16.2</lombok.version>
-    </properties>
-
 
     <profiles>
         <profile>
@@ -54,17 +51,12 @@
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-osgi-bundle</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>ru.vektory79</groupId>
-            <artifactId>trove</artifactId>
-            <scope>compile</scope>
+            <groupId>net.sf.trove4j</groupId>
+            <artifactId>trove4j</artifactId>
         </dependency>
         <dependency>
             <groupId>com.googlecode.junit-toolbox</groupId>
@@ -73,72 +65,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>ru.vektory79</groupId>
-            <artifactId>tests-support</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeScope>compile</includeScope>
-                            <excludeScope>provided</excludeScope>
-                            <includeGroupIds>
-                                org.jetbrains.kotlin,
-                                ru.vektory79
-                            </includeGroupIds>
-                            <outputDirectory>${project.build.directory}/bundle</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <executions>
-                    <execution>
-                        <id>bundle-manifest</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>manifest</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>ru.vektory79.kspeedup</Bundle-SymbolicName>
-                        <Bundle-Activator>ru.vektory79.kspeedup.activator.Activator</Bundle-Activator>
-                        <Export-Package>
-                            ru.vektory79.kspeedup,
-                            ru.vektory79.kspeedup.stack,
-                            ru.vektory79.kspeedup.collections
-                        </Export-Package>
-                        <Import-Package>
-                            org.osgi.framework,
-                            gnu.trove.*
-                        </Import-Package>
-                        <Require-Bundle>
-                            org.jetbrains.kotlin.osgi-bundle
-                        </Require-Bundle>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

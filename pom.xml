@@ -10,7 +10,6 @@
 	<packaging>pom</packaging>
     
 	<modules>
-        <module>tests-support</module>
         <module>kspeedup</module>
 		<module>kspeedup-jmh</module>
 	</modules>
@@ -27,7 +26,7 @@
         <illegaltransitivereportonly>true</illegaltransitivereportonly>
 
         <!-- Libs versions -->
-        <kotlin.version>1.1.4</kotlin.version>
+        <kotlin.version>1.4.10</kotlin.version>
         <lwjgl.version>3.0.0</lwjgl.version>
 
         <arquillian.version>1.1.2.Final</arquillian.version>
@@ -37,65 +36,12 @@
         <junit.version>4.12</junit.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>bintray-vektory79-osgi-bundles</id>
-            <name>bintray</name>
-            <url>http://dl.bintray.com/vektory79/osgi-bundles</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>bintray-vektory79-osgi-bundles</id>
-            <name>bintray-plugins</name>
-            <url>http://dl.bintray.com/vektory79/osgi-bundles</url>
-        </pluginRepository>
-    </pluginRepositories>
-    
     <dependencies>
-        <!-- OSGi API -->
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>${osgi.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
-            <version>${osgi.version}</version>
-            <scope>compile</scope>
-        </dependency>
         <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- OSGi Arquillian -->
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-container-felix-embedded</artifactId>
-            <version>${arquillian.osgi.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <version>${arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.osgi</groupId>
-            <artifactId>shrinkwrap-osgi</artifactId>
-            <version>${shrinkwrap.osgi.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -105,11 +51,6 @@
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-stdlib</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-runtime</artifactId>
                 <version>${kotlin.version}</version>
             </dependency>
             <dependency>
@@ -134,8 +75,8 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>ru.vektory79</groupId>
-                <artifactId>trove</artifactId>
+                <groupId>net.sf.trove4j</groupId>
+                <artifactId>trove4j</artifactId>
                 <version>3.0.3</version>
                 <scope>compile</scope>
             </dependency>
@@ -194,7 +135,7 @@
                                         <version>[1.8.0,)</version>
                                     </requireJavaVersion>
                                     <requireMavenVersion>
-                                        <version>[3.3.3,)</version>
+                                        <version>[3.6.3,)</version>
                                     </requireMavenVersion>
                                 </rules>
                             </configuration>
@@ -202,35 +143,6 @@
                     </executions>
                 </plugin>
 
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <version>3.0.0</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <!-- Split packages in combination with <Export-Package> causes bloated
-                            jars otherwise -->
-                        <excludeDependencies>true</excludeDependencies>
-                        <instructions>
-                            <_removeheaders>Ignore-Package</_removeheaders>
-                            <_nouses>true</_nouses>
-                            <_snapshot>${osgi.snapshot.qualifier}</_snapshot>
-                            <Bundle-Version>
-                                ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${osgi.snapshot.qualifier}
-                            </Bundle-Version>
-                        </instructions>
-                        <supportedProjectTypes>
-                            <supportedProjectType>jar</supportedProjectType>
-                            <supportedProjectType>bundle</supportedProjectType>
-                        </supportedProjectTypes>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-help-plugin</artifactId>
-                    <version>2.2</version>
-                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
@@ -286,11 +198,6 @@
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.codehaus.cargo</groupId>
-                    <artifactId>cargo-maven2-plugin</artifactId>
-                    <version>1.4.16</version>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>2.18.1</version>
@@ -313,131 +220,16 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>2.6</version>
-                    <executions>
-                        <!-- No OSGi manifestEntries for <goal>jar</goal>: if it supported,
-                            then felix has already added them -->
-                        <execution>
-                            <id>test-jar</id>
-                            <goals>
-                                <goal>test-jar</goal>
-                            </goals>
-                            <configuration>
-                                <excludes>
-                                    <exclude>**/logback-test.xml</exclude>
-                                    <exclude>**/jndi.properties</exclude>
-                                </excludes>
-                                <archive>
-                                    <manifestEntries>
-                                        <Bundle-SymbolicName>${project.artifactId}.tests</Bundle-SymbolicName>
-                                        <Bundle-Version>
-                                            ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${osgi.snapshot.qualifier}
-                                        </Bundle-Version>
-                                        <Bundle-Name>${project.name}</Bundle-Name>
-                                        <Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
-                                    </manifestEntries>
-                                </archive>
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <archive>
-                            <manifest>
-                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            </manifest>
-                        </archive>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
                     <version>2.4</version>
-                    <executions>
-                        <execution>
-                            <id>jar</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                            <configuration>
-                                <archive>
-                                    <manifestEntries>
-                                        <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
-                                        <Bundle-SymbolicName>${project.artifactId}.source</Bundle-SymbolicName>
-                                        <Bundle-Version>
-                                            ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${osgi.snapshot.qualifier}
-                                        </Bundle-Version>
-                                        <Bundle-Name>${project.name}</Bundle-Name>
-                                        <Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
-                                        <Eclipse-SourceBundle>
-                                            ${project.artifactId};version="${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${osgi.snapshot.qualifier}";roots:="."
-                                        </Eclipse-SourceBundle>
-                                    </manifestEntries>
-                                </archive>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>test-jar</id>
-                            <goals>
-                                <goal>test-jar</goal>
-                            </goals>
-                            <configuration>
-                                <archive>
-                                    <manifestEntries>
-                                        <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
-                                        <Bundle-SymbolicName>${project.artifactId}.tests.source</Bundle-SymbolicName>
-                                        <Bundle-Version>
-                                            ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${osgi.snapshot.qualifier}
-                                        </Bundle-Version>
-                                        <Bundle-Name>${project.name}</Bundle-Name>
-                                        <Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
-                                        <Eclipse-SourceBundle>
-                                            ${project.artifactId}.tests;version="${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${osgi.snapshot.qualifier}";roots:="."
-                                        </Eclipse-SourceBundle>
-                                    </manifestEntries>
-                                </archive>
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>2.6</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>1.9.1</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>parse-version</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>jaxb2-maven-plugin</artifactId>
-                    <version>2.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>2.10</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>2.5.5</version>
-                    <dependencies>
-                        <dependency>
-                            <!-- Entry needed to enable jdocbook unzipping -->
-                            <groupId>org.jboss.maven.plugins</groupId>
-                            <artifactId>maven-jdocbook-plugin</artifactId>
-                            <version>2.3.9</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -450,11 +242,6 @@
                     <version>2.8.2</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.2</version>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.5.2</version>
@@ -464,38 +251,6 @@
                         <pushChanges>false</pushChanges>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                     </configuration>
-                </plugin>
-                <!-- IDE -->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <version>1.4.0</version>
-                </plugin>
-                <!--Site -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>3.4</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.10.3</version>
-                    <configuration>
-                        <links>
-                            <link>http://docs.oracle.com/javase/6/docs/api</link>
-                        </links>
-                        <minmemory>128m</minmemory>
-                        <maxmemory>512m</maxmemory>
-                        <author>false</author>
-                        <breakiterator>true</breakiterator>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>findbugs-maven-plugin</artifactId>
-                    <!-- Keep in sync with <reporting><plugins> -->
-                    <version>3.0.2</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -508,47 +263,8 @@
                 <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
             <plugin>
-                <!-- Entry needed to provide parsed version properties -->
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <!-- Entry needed to create test-jars even for packaging types war, bundle,
-                    ... -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <!-- Entry needed to create, install and deploy sources jars -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <executions>
-                    <execution>
-                        <id>bundle-manifest</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>manifest</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <instructions>
-                        <Include-Resource>
-                            <!--/=src/main/resources/,-->
-                            META-INF=target/classes/META-INF
-                        </Include-Resource>
-                    </instructions>
-                </configuration>
             </plugin>
         </plugins>
     </build>
