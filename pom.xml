@@ -33,7 +33,7 @@
         <arquillian.osgi.version>2.1.0.CR18</arquillian.osgi.version>
         <shrinkwrap.osgi.version>1.0.0-alpha-1</shrinkwrap.osgi.version>
         <osgi.version>5.0.0</osgi.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
     </properties>
 
     <dependencies>
